@@ -1,0 +1,109 @@
+# Initialize the menu with Italian dishes and their prices
+menu = [
+    ["Margherita Pizza", 8.00],
+    ["Pasta Carbonara", 9.50],
+    ["Lasagna", 10.00],
+    ["Risotto", 9.00],
+    ["Spaghetti Bolognese", 8.50],
+    ["Fettuccine Alfredo", 9.25],
+    ["Penne Arrabbiata", 7.75],
+    ["Gnocchi", 8.25],
+    ["Ravioli", 9.00],
+    ["Tiramisu", 5.50]
+]
+
+# Initialize order list and total cost
+order = []
+total_cost = 0
+
+# Function to display the main menu
+def display_main_menu():
+    print("\n--- QuickBite Italian Food Ordering System ---")
+    print("1. View Menu")
+    print("2. Add Item to Order")
+    print("3. View Order Summary")
+    print("4. Checkout")
+    print("5. Exit")
+    print("--------------------------------")
+
+# Function to display the menu items
+def view_menu():
+    print("\nItalian Dishes Available:")
+    for index, item in enumerate(menu, start=1):
+        print(f"{index}. {item[0]} - ${item[1]:.2f}")
+
+# Function to add an item to the order
+def add_item_to_order():
+    global total_cost  # Declare global here to modify total_cost
+    view_menu()
+    try:
+        item_number = int(input("Enter the number of the dish you want to add to your order: ")) - 1
+        quantity = int(input("Enter quantity: "))
+        
+        if 0 <= item_number < len(menu) and quantity > 0:
+            item_name = menu[item_number][0]
+            item_price = menu[item_number][1]
+            item_cost = item_price * quantity
+            order.append({"name": item_name, "quantity": quantity, "cost": item_cost})
+            total_cost += item_cost
+            print(f"Added {quantity} x {item_name} to your order.")
+        else:
+            print("Invalid item number or quantity. Please try again.")
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+
+# Function to view the current order summary
+def view_order_summary():
+    if not order:
+        print("\nYour order is empty.")
+    else:
+        print("\nOrder Summary:")
+        for item in order:
+            print(f"{item['quantity']} x {item['name']} - ${item['cost']:.2f}")
+        print(f"Total Cost: ${total_cost:.2f}")
+
+# Function to proceed to checkout
+def checkout():
+    global total_cost  # Declare global here to reset total_cost
+    if not order:
+        print("\nYour order is empty. Add items to proceed to checkout.")
+    else:
+        tax = total_cost * 0.08  # Assuming 8% tax rate
+        final_total = total_cost + tax
+        print("\n--- Checkout ---")
+        print(f"Total (before tax): ${total_cost:.2f}")
+        print(f"Tax: ${tax:.2f}")
+        print(f"Final Total: ${final_total:.2f}")
+        
+        confirm = input("Do you want to confirm your order? (yes/no): ").strip().lower()
+        if confirm == 'yes':
+            print("\nOrder confirmed! Thank you for dining with QuickBite.")
+            print("Receipt:")
+            for item in order:
+                print(f"{item['quantity']} x {item['name']} - ${item['cost']:.2f}")
+            print(f"Final Total: ${final_total:.2f}")
+            # Clear the order after checkout
+            order.clear()
+            total_cost = 0  # Reset total_cost after checkout
+        else:
+            print("Returning to main menu.")
+
+# Main loop to run the ordering system
+while True:
+    display_main_menu()
+    
+    choice = input("Enter your choice (1-5): ").strip()
+    
+    if choice == '1':
+        view_menu()
+    elif choice == '2':
+        add_item_to_order()
+    elif choice == '3':
+        view_order_summary()
+    elif choice == '4':
+        checkout()
+    elif choice == '5':
+        print("Exiting the system. Have a great day!")
+        break
+    else:
+        print("Invalid choice. Please select a valid option.")2
